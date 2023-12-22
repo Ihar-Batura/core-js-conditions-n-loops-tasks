@@ -159,7 +159,11 @@ function convertNumberToString(/* numberStr */) {
  *  'qweqwe'    => false
  */
 function isPalindrome(str) {
-  return str[0] === str[str.length - 1] && str[1] === str[str.length - 2];
+  let strPal = '';
+  for (let i = str.length - 1; i >= 0; i -= 1) {
+    strPal += str[i];
+  }
+  return str === strPal;
 }
 
 /**
@@ -176,8 +180,13 @@ function isPalindrome(str) {
  *  'qwerty', 'Q'     => -1
  *  'qwerty', 'p'     => -1
  */
-function getIndexOf(/* str, letter */) {
-  throw new Error('Not implemented');
+function getIndexOf(str, letter) {
+  for (let i = 0; i < str.length; i += 1) {
+    if (str[i] === letter) {
+      return i;
+    }
+  }
+  return -1;
 }
 
 /**
