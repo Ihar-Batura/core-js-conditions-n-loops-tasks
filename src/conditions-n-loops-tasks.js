@@ -466,8 +466,63 @@ function shuffleChar(str, iterations) {
  * @param {number} number The source number
  * @returns {number} The nearest larger number, or original number if none exists.
  */
-function getNearestBigger(/* number */) {
-  throw new Error('Not implemented');
+function getNearestBigger(number) {
+  let str = '';
+  str += number;
+  const arr = [];
+
+  for (let k = str.length; k > 0; k -= 1) {
+    arr.push(str[k - 1]);
+  }
+
+  let count = 0;
+  let res = '';
+
+  for (let i = 0; i < arr.length; i += 1) {
+    if (arr[i] > arr[i + 1] && count === 0) {
+      count += 1;
+      const firstPartOfNumber = [...arr]
+        .splice(i + 2)
+        .reverse()
+        .join('');
+      const secondPartOfNumber = [...arr].splice(0, i + 2);
+
+      res += firstPartOfNumber;
+
+      const startNumber = +[...secondPartOfNumber].reverse().join('');
+      const possibleNumbers = [startNumber];
+
+      const findPossibleNumbers = (arrNumbers) => {
+        let result = [];
+        if (arrNumbers.length === 1) {
+          return [arrNumbers];
+        }
+
+        arrNumbers.forEach((el, ind) => {
+          const copyArr = [...arrNumbers];
+          copyArr.splice(ind, 1);
+          let tmp = findPossibleNumbers(copyArr);
+          tmp = tmp.map((_set) => [el, ..._set]);
+          result = [...result, ...tmp];
+        });
+        return result;
+      };
+      const arrWithPossNumbers = findPossibleNumbers(secondPartOfNumber);
+
+      arrWithPossNumbers.forEach((element) => {
+        const num = +element.reverse().join('');
+        if (num > startNumber) {
+          possibleNumbers.push(num);
+        }
+      });
+
+      possibleNumbers.sort((a, b) => a - b);
+
+      res += possibleNumbers[1];
+    }
+  }
+
+  return count > 0 ? +res : number;
 }
 
 module.exports = {
